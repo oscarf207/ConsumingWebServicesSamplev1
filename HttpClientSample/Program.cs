@@ -122,12 +122,22 @@ namespace HttpClientSample
         static HttpClient client = new HttpClient();        
 
         ////////////////////////////////////////////    GETTING URI
+        private static HttpClient getPhoenixClient(string token)
+        {
+            client.BaseAddress = new Uri(Constants.URL_BASE_PARAM);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            if(token != null)
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            return client;
+        }
+
         private static HttpClient getPhoenixClient()
         {
             client.BaseAddress = new Uri(Constants.URL_BASE_PARAM);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
+            
             return client;
         }
 
@@ -136,11 +146,13 @@ namespace HttpClientSample
         //////////////////////////////////////////// GET auth
         public static async Task<AuthResponseModel> authRequest(AuthRequestModel request)
         {
-            //HttpClient c = getPhoenixClient(); // fixing with change its position get out this method.
+             HttpClient cTest = getPhoenixClient();
+
             HttpResponseMessage response = await cTest.PostAsJsonAsync("auth", request);
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                AuthResponseModel r = await response.Content.ReadAsAsync<AuthResponseModel>(new[] { new JsonMediaTypeFormatter() });
+                //AuthResponseModel r = await response.Content.ReadAsAsync<AuthResponseModel>(new[] { new JsonMediaTypeFormatter() });
+                AuthResponseModel r = await response.Content.ReadAsAsync<AuthResponseModel>();
                 Console.WriteLine("Auth::");
                 return r;
             }
@@ -161,7 +173,8 @@ namespace HttpClientSample
             HttpResponseMessage response = await cTest.PostAsJsonAsync("getData", request);
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                GetDataResponseModel r = await response.Content.ReadAsAsync<GetDataResponseModel>(new[] { new JsonMediaTypeFormatter() });
+                //GetDataResponseModel r = await response.Content.ReadAsAsync<GetDataResponseModel>(new[] { new JsonMediaTypeFormatter() });
+                GetDataResponseModel r = await response.Content.ReadAsAsync<GetDataResponseModel>();
                 Console.WriteLine("GetData::");
                 return r;
             }
@@ -181,7 +194,8 @@ namespace HttpClientSample
             HttpResponseMessage response = await cTest.PostAsJsonAsync("sendData", request);
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                SendDataResponseModel r = await response.Content.ReadAsAsync<SendDataResponseModel>(new[] { new JsonMediaTypeFormatter() });
+                //SendDataResponseModel r = await response.Content.ReadAsAsync<SendDataResponseModel>(new[] { new JsonMediaTypeFormatter() });
+                SendDataResponseModel r = await response.Content.ReadAsAsync<SendDataResponseModel>();
                 Console.WriteLine("SendData::");
                 return r;
             }
@@ -201,7 +215,8 @@ namespace HttpClientSample
             HttpResponseMessage response = await cTest.PostAsJsonAsync("generateSms", request);
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                GenerateSmsResponseModel r = await response.Content.ReadAsAsync<GenerateSmsResponseModel>(new[] { new JsonMediaTypeFormatter() });
+                //GenerateSmsResponseModel r = await response.Content.ReadAsAsync<GenerateSmsResponseModel>(new[] { new JsonMediaTypeFormatter() });
+                GenerateSmsResponseModel r = await response.Content.ReadAsAsync<GenerateSmsResponseModel>();
                 Console.WriteLine("GenerateSms::");
                 return r;
             }
@@ -220,7 +235,8 @@ namespace HttpClientSample
             HttpResponseMessage response = await cTest.PostAsJsonAsync("validateSms", request);
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                ValidateSmsResponseModel r = await response.Content.ReadAsAsync<ValidateSmsResponseModel>(new[] { new JsonMediaTypeFormatter() });
+                //ValidateSmsResponseModel r = await response.Content.ReadAsAsync<ValidateSmsResponseModel>(new[] { new JsonMediaTypeFormatter() });
+                ValidateSmsResponseModel r = await response.Content.ReadAsAsync<ValidateSmsResponseModel>();
                 Console.WriteLine("ValidateSms::");
                 return r;
             }
@@ -239,7 +255,8 @@ namespace HttpClientSample
             HttpResponseMessage response = await cTest.PostAsJsonAsync("closeOperation", request);
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                CloseOperationResponseModel r = await response.Content.ReadAsAsync<CloseOperationResponseModel>(new[] { new JsonMediaTypeFormatter() });
+                //CloseOperationResponseModel r = await response.Content.ReadAsAsync<CloseOperationResponseModel>(new[] { new JsonMediaTypeFormatter() });
+                CloseOperationResponseModel r = await response.Content.ReadAsAsync<CloseOperationResponseModel>();
                 Console.WriteLine("CloseOperation::");
                 return r;
             }
@@ -257,7 +274,7 @@ namespace HttpClientSample
         ////////////PRINTS
         static void ShowAuth(AuthResponseModel authT)
         {
-            Console.WriteLine($"key: {authT.AuthKey}\tresponseCode: {authT.ResponseCode}\tresponseMessage: {authT.ResponseMessage}");
+           Console.WriteLine($"key: {authT.AuthKey}\tresponseCode: {authT.ResponseCode}\tresponseMessage: {authT.ResponseMessage}");
         }
 
         static void ShowGetData(GetDataResponseModel getDataT)
@@ -285,12 +302,18 @@ namespace HttpClientSample
         }
 
 
+        
 
-        static async Task RunAllAsync() 
+        ///////////////////////////////////////////////////     MAIN
+         static async Task Main()
         {
-            AuthRequestModel r1 = new AuthRequestModel() { ClientId = "112321312", ClientPassword = "123123123" };
 
-            GetDataRequestModel r2 = new GetDataRequestModel() { CustomerId = "10012102120" };
+            //RunAllAsync().GetAwaiter().GetResult();
+
+
+            AuthRequestModel r1 = new AuthRequestModel() { ClientId = "clientId", ClientPassword = "dqwdqwdqd"};
+
+            GetDataRequestModel r2 = new GetDataRequestModel() { CustomerId = "71010245" };
 
             SendDataRequestModel r3 = new SendDataRequestModel() { TransactionId = "10012102120", UserEmail = "asdasdasd", UserKeyword = "asdasdww" };
 
@@ -303,10 +326,14 @@ namespace HttpClientSample
 
             try
             {
-                
-                AuthResponseModel authTest = await authRequest(r1);
-                ShowAuth(authTest);
 
+
+
+                AuthResponseModel authTest = await authRequest(r1);
+
+
+               ShowAuth(authTest);
+                
                 GetDataResponseModel getDataT = await getDataRequest(r2);
                 ShowGetData(getDataT);
 
@@ -321,25 +348,19 @@ namespace HttpClientSample
 
                 CloseOperationResponseModel closeOperationT = await closeOperationRequest(r6);
                 ShowCloseOperation(closeOperationT);
-                               
-
+                
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-            }
+
+            
+        }
 
             Console.ReadLine();
 
 
-        }
 
-            ///////////////////////////////////////////////////     MAIN
-            static void Main()
-        {
-
-            RunAllAsync().GetAwaiter().GetResult();
-                      
         }
 
     }
