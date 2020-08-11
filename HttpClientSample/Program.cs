@@ -4,6 +4,15 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.IO;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+
+
+
+
 
 namespace HttpClientSample
 {
@@ -146,18 +155,23 @@ namespace HttpClientSample
         //////////////////////////////////////////// GET auth
         public static async Task<AuthResponseModel> authRequest(AuthRequestModel request)
         {
-             HttpClient cTest = getPhoenixClient();
+            Console.WriteLine("authReq::");
+            HttpClient cTest = getPhoenixClient();
+            Console.WriteLine("getPhonx::");
 
             HttpResponseMessage response = await cTest.PostAsJsonAsync("auth", request);
+            Console.WriteLine("respns::");
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                //AuthResponseModel r = await response.Content.ReadAsAsync<AuthResponseModel>(new[] { new JsonMediaTypeFormatter() });
-                AuthResponseModel r = await response.Content.ReadAsAsync<AuthResponseModel>();
+                Console.WriteLine("StatusOk::");
+                AuthResponseModel r = await response.Content.ReadAsAsync<AuthResponseModel>(new[] { new JsonMediaTypeFormatter() });
+                //AuthResponseModel r = await response.Content.ReadAsAsync<AuthResponseModel>();
                 Console.WriteLine("Auth::");
                 return r;
             }
             else
             {
+                Console.WriteLine("Statusv,,x::");
                 return null;
             }
             
@@ -330,9 +344,7 @@ namespace HttpClientSample
 
 
                 AuthResponseModel authTest = await authRequest(r1);
-
-
-               ShowAuth(authTest);
+                ShowAuth(authTest);
                 
                 GetDataResponseModel getDataT = await getDataRequest(r2);
                 ShowGetData(getDataT);
@@ -355,13 +367,10 @@ namespace HttpClientSample
                 Console.WriteLine(e.Message);
 
             
-        }
-
+            }
             Console.ReadLine();
-
-
-
         }
+
 
     }
 
