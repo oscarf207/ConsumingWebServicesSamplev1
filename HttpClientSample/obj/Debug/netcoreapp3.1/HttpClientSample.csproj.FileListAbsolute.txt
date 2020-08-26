@@ -75,4 +75,8 @@ C:\Users\USERVASSPERU\source\repos\HttpClientSample\HttpClientSample\bin\Debug\n
 C:\Users\USERVASSPERU\source\repos\HttpClientSample\HttpClientSample\bin\Debug\netcoreapp3.1\OpenIddict.Server.dll
 C:\Users\USERVASSPERU\source\repos\HttpClientSample\HttpClientSample\bin\Debug\netcoreapp3.1\OpenIddict.Validation.dll
 C:\Users\USERVASSPERU\source\repos\HttpClientSample\HttpClientSample\bin\Debug\netcoreapp3.1\System.Security.Cryptography.Xml.dll
+C:\Users\USERVASSPERU\source\repos\HttpClientSample\HttpClientSample\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.dll
+C:\Users\USERVASSPERU\source\repos\HttpClientSample\HttpClientSample\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Binder.dll
+C:\Users\USERVASSPERU\source\repos\HttpClientSample\HttpClientSample\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\USERVASSPERU\source\repos\HttpClientSample\HttpClientSample\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Http.dll
 C:\Users\USERVASSPERU\source\repos\HttpClientSample\HttpClientSample\obj\Debug\netcoreapp3.1\HttpClientSample.csproj.CoreCompileInputs.cache
